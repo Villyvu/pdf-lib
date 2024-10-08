@@ -50,6 +50,37 @@ class PDFWidgetAnnotation extends PDFAnnotation {
     this.dict.set(PDFName.of('P'), page);
   }
 
+  AA(): PDFDict | undefined {
+    const AA = this.dict.lookup(PDFName.of('AA'));
+    if (AA instanceof PDFDict) return AA;
+    return undefined
+  }
+
+  setAA(js: PDFRef, eventType: string){
+
+    let obj = {};
+
+    switch (eventType) {
+      case 'MouseUp':
+        obj = {
+          U: js
+        }
+        break;
+      case 'KeyStroke':
+        obj = {
+          K: js
+        }
+        break;
+    }
+
+    this.dict.set(PDFName.of('AA'), this.dict.context.obj(obj));
+  }
+
+
+  getAddtionalActions(){
+    return this.AA();
+  }
+
   setDefaultAppearance(appearance: string) {
     this.dict.set(PDFName.of('DA'), PDFString.of(appearance));
   }

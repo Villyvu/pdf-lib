@@ -16,7 +16,6 @@ class PDFAcroTerminal extends PDFAcroField {
 
   getWidgets(): PDFWidgetAnnotation[] {
     const kidDicts = this.Kids();
-
     // This field is itself a widget
     if (!kidDicts) return [PDFWidgetAnnotation.fromDict(this.dict)];
 

@@ -1,7 +1,7 @@
 import Embeddable from './Embeddable';
 import PDFDocument from './PDFDocument';
 import JavaScriptEmbedder from '../core/embedders/JavaScriptEmbedder';
-import { PDFName, PDFArray, PDFDict, PDFHexString, PDFRef } from '../core';
+import { PDFRef } from '../core';
 
 /**
  * Represents JavaScript that has been embedded in a [[PDFDocument]].
@@ -18,14 +18,16 @@ export default class PDFJavaScript implements Embeddable {
    * @param doc The document to which the script will belong.
    * @param embedder The embedder that will be used to embed the script.
    */
-  static of = (ref: PDFRef, doc: PDFDocument, embedder: JavaScriptEmbedder) =>
-    new PDFJavaScript(ref, doc, embedder);
+  static of = (ref: PDFRef, doc: PDFDocument, embedder: JavaScriptEmbedder, scriptName: string) =>
+    new PDFJavaScript(ref, doc, embedder, scriptName);
 
   /** The unique reference assigned to this embedded script within the document. */
   readonly ref: PDFRef;
 
   /** The document to which this embedded script belongs. */
   readonly doc: PDFDocument;
+
+  readonly scriptName: string;
 
   private alreadyEmbedded = false;
   private readonly embedder: JavaScriptEmbedder;
@@ -34,10 +36,12 @@ export default class PDFJavaScript implements Embeddable {
     ref: PDFRef,
     doc: PDFDocument,
     embedder: JavaScriptEmbedder,
+    scriptName: string
   ) {
     this.ref = ref;
     this.doc = doc;
     this.embedder = embedder;
+    this.scriptName = scriptName
   }
 
   /**
@@ -51,32 +55,36 @@ export default class PDFJavaScript implements Embeddable {
    */
   async embed(): Promise<void> {
     if (!this.alreadyEmbedded) {
-      const { catalog, context } = this.doc;
+      //const { catalog, context } = this.doc;
 
-      const ref = await this.embedder.embedIntoContext(
+      await this.embedder.embedIntoContext(
         this.doc.context,
         this.ref,
       );
 
-      if (!catalog.has(PDFName.of('Names'))) {
-        catalog.set(PDFName.of('Names'), context.obj({}));
-      }
-      const Names = catalog.lookup(PDFName.of('Names'), PDFDict);
+      // if (!catalog.has(PDFName.of('Names'))) {
+      //   catalog.set(PDFName.of('Names'), context.obj({}));
+      // }
+      // const Names = catalog.lookup(PDFName.of('Names'), PDFDict);
 
-      if (!Names.has(PDFName.of('JavaScript'))) {
-        Names.set(PDFName.of('JavaScript'), context.obj({}));
-      }
-      const Javascript = Names.lookup(PDFName.of('JavaScript'), PDFDict);
+      // if (!Names.has(PDFName.of('JavaScript'))) {
+      //   Names.set(PDFName.of('JavaScript'), context.obj({}));
+      // }
+      // const Javascript = Names.lookup(PDFName.of('JavaScript'), PDFDict);
 
-      if (!Javascript.has(PDFName.of('Names'))) {
-        Javascript.set(PDFName.of('Names'), context.obj([]));
-      }
-      const JSNames = Javascript.lookup(PDFName.of('Names'), PDFArray);
+      // if (!Javascript.has(PDFName.of('Names'))) {
+      //   Javascript.set(PDFName.of('Names'), context.obj([]));
+      // }
+      // const JSNames = Javascript.lookup(PDFName.of('Names'), PDFArray);
 
-      JSNames.push(PDFHexString.fromText(this.embedder.scriptName));
-      JSNames.push(ref);
+      // JSNames.push(PDFHexString.fromText(this.embedder.scriptName));
+      // JSNames.push(ref);
 
       this.alreadyEmbedded = true;
     }
+  }
+
+  getJavascriptRef(){
+    return this.ref
   }
 }

@@ -10,6 +10,7 @@ import PDFStream from './PDFStream';
 import PDFString from './PDFString';
 import PDFContext from '../PDFContext';
 import CharCodes from '../syntax/CharCodes';
+import { PDFJavaScript } from 'src/api';
 
 export type DictMap = Map<PDFName, PDFObject>;
 
@@ -76,6 +77,7 @@ class PDFDict extends PDFObject {
   lookupMaybe(key: PDFName, type: typeof PDFStream): PDFStream | undefined;
   lookupMaybe(key: PDFName, type: typeof PDFRef): PDFRef | undefined;
   lookupMaybe(key: PDFName, type: typeof PDFString): PDFString | undefined;
+  lookupMaybe(key: PDFName, type: typeof PDFJavaScript): PDFJavaScript | undefined;
   lookupMaybe(
     ref: PDFName,
     type1: typeof PDFString,

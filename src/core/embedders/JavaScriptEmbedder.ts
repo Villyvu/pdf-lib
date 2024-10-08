@@ -1,6 +1,6 @@
-import PDFHexString from '../objects/PDFHexString';
 import PDFContext from '../PDFContext';
 import PDFRef from '../objects/PDFRef';
+import PDFString from '../objects/PDFString';
 
 class JavaScriptEmbedder {
   static for(script: string, scriptName: string) {
@@ -19,7 +19,7 @@ class JavaScriptEmbedder {
     const jsActionDict = context.obj({
       Type: 'Action',
       S: 'JavaScript',
-      JS: PDFHexString.fromText(this.script),
+      JS: PDFString.of(this.script),
     });
 
     if (ref) {

@@ -93,6 +93,8 @@ export default class PDFButton extends PDFField {
     this.markAsClean();
   }
 
+
+
   /**
    * Set the font size for this field. Larger font sizes will result in larger
    * text being displayed when PDF readers render this button. Font sizes may
@@ -172,7 +174,6 @@ export default class PDFButton extends PDFField {
       page: page.ref,
     });
     const widgetRef = this.doc.context.register(widget.dict);
-
     // Add widget to this field
     this.acroField.addWidget(widgetRef);
 
@@ -255,6 +256,7 @@ export default class PDFButton extends PDFField {
     }
   }
 
+
   private updateWidgetAppearance(
     widget: PDFWidgetAnnotation,
     font: PDFFont,
@@ -264,4 +266,12 @@ export default class PDFButton extends PDFField {
     const appearances = normalizeAppearance(apProvider(this, widget, font));
     this.updateWidgetAppearanceWithFont(widget, font, appearances);
   }
+
+  setJavaScriptAction(scriptName: string, eventType: string){
+    const widgets = this.acroField.getWidgets()
+    for (let idx = 0, len = widgets.length; idx < len; idx++) {
+      const widget = widgets[idx];
+      this.updateWidgetJavascript(widget, scriptName, eventType)
+  }
+}
 }

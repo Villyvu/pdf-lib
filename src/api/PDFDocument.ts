@@ -854,8 +854,17 @@ export default class PDFDocument {
     const embedder = JavaScriptEmbedder.for(script, name);
 
     const ref = this.context.nextRef();
-    const javaScript = PDFJavaScript.of(ref, this, embedder);
+    const javaScript = PDFJavaScript.of(ref, this, embedder, name);
     this.javaScripts.push(javaScript);
+  }
+
+
+  getJavaScript(scriptName: string): PDFJavaScript | undefined {
+    return this.javaScripts.find(js => js.scriptName == scriptName)
+  }
+
+  getJavaScripts(): PDFJavaScript[] {
+    return this.javaScripts
   }
 
   /**

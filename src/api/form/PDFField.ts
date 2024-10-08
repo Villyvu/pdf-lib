@@ -39,6 +39,7 @@ export interface FieldAppearanceOptions {
   rotate?: Rotation;
   font?: PDFFont;
   hidden?: boolean;
+  js?: PDFRef;
 }
 
 export const assertFieldAppearanceOptions = (
@@ -340,6 +341,8 @@ export default class PDFField {
       this.acroField.setDefaultAppearance(newDa);
     }
 
+    //if (js) widget.setAA(js)
+
     return widget;
   }
 
@@ -353,6 +356,12 @@ export default class PDFField {
       rollover: rollover && this.createAppearanceStream(widget, rollover, font),
       down: down && this.createAppearanceStream(widget, down, font),
     });
+  }
+
+  protected updateWidgetJavascript(widget: PDFWidgetAnnotation, scriptName: string, eventType: string){
+    const jsList = this.doc.getJavaScript(scriptName)
+    const ref = jsList?.ref
+    if(ref) widget.setAA(ref, eventType)
   }
 
   protected updateOnOffWidgetAppearance(

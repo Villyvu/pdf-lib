@@ -823,4 +823,12 @@ export default class PDFTextField extends PDFField {
     const appearances = normalizeAppearance(apProvider(this, widget, font));
     this.updateWidgetAppearanceWithFont(widget, font, appearances);
   }
+
+  setJavaScriptAction(scriptName: string, eventType: string){
+    const widgets = this.acroField.getWidgets()
+    for (let idx = 0, len = widgets.length; idx < len; idx++) {
+      const widget = widgets[idx];
+      this.updateWidgetJavascript(widget, scriptName, eventType)
+  }
+}
 }
